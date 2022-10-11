@@ -8,7 +8,7 @@
 int main()
 {
   int opcao, linha = 0;
-  char texto, rtn[50];
+  char texto[50], rtn[50];
 
   // Estrutura da mensagem
   typedef struct
@@ -59,7 +59,7 @@ int main()
       else
       {
         printf("Digite o texto:");
-        scanf("%d", &texto);
+        scanf("%s", texto);
 
         msg.cod = opcao;
         msg.index = linha;
