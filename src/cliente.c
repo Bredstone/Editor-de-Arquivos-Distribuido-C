@@ -7,7 +7,36 @@
 
 int main()
 {
-  int opcao, line_num = 0;
+  int opcao, linha = 0;
+  char texto, rtn[50];
+
+  // Estrutura da mensagem
+  typedef struct
+  {
+    int cod;
+    int index;
+    char line[50];
+  } Message;
+
+  Message msg;
+
+  // Variáveis do socket
+  int result;
+  int sockfd;
+  int len;
+  struct sockaddr_un address;
+
+  // Configurando o socket
+  sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
+  address.sun_family = AF_UNIX;
+  strcpy(address.sun_path, "server_socket");
+  len = sizeof(address);
+  result = connect(sockfd, (struct sockaddr *)&address, len);
+  if (result == -1)
+  {
+    perror("oops: client1");
+    exit(1);
+  }
 
   while (1)
   {
@@ -23,13 +52,47 @@ int main()
     switch (opcao)
     {
     case 1:
-    printf("Digite o número da linha:");
-    scanf("%d", &line_num);
-    if(line_num < 0 || line_num > 300) printf("Linha inválida!");
+      printf("Digite o número da linha:");
+      scanf("%d", &linha);
+      if (linha < 0 || linha > 50)
+        printf("Linha inválida!");
+      else
+      {
+        printf("Digite o texto:");
+        scanf("%d", &texto);
+
+        msg.cod = opcao;
+        msg.index = linha;
+        strcpy(msg.line, texto);
+
+        // Enviando mensagem
+        write(sockfd, &msg, 1);
+      }
 
       break;
 
     case 2:
+      printf("Digite o número da linha:");
+      scanf("%d", &linha);
+      if (linha < 0 || linha > 50)
+        printf("Linha inválida!");
+      else
+      {
+        msg.cod = opcao;
+        msg.index = linha;
+
+        // Enviando mensagem
+        write(sockfd, &msg, 1);
+
+        // Resposta
+        read(sockfd, &rtn, 1);
+        if (strlen(rtn) == 0)
+          printf("Linha vazia!\n");
+        else
+        {
+          printf("%s\n", rtn);
+        }
+      }
 
       break;
 
