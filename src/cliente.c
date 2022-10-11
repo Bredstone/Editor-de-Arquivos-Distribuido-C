@@ -54,14 +54,14 @@ int main()
     case 1:
       printf("Digite o número da linha:");
       scanf("%d", &linha);
-      if (linha < 0 || linha > 50)
+      if (linha < 0 || linha > 50){
         printf("Linha inválida!");
-      else
+      } else
       {
         printf("Digite o texto:");
         scanf("%s", texto);
 
-        msg.cod = opcao;
+        msg.cod = 0;
         msg.index = linha;
         strcpy(msg.line, texto);
 
@@ -74,11 +74,11 @@ int main()
     case 2:
       printf("Digite o número da linha:");
       scanf("%d", &linha);
-      if (linha < 0 || linha > 50)
+      if (linha < 0 || linha > 50){
         printf("Linha inválida!");
-      else
+      } else
       {
-        msg.cod = opcao;
+        msg.cod = 1;
         msg.index = linha;
 
         // Enviando mensagem
@@ -86,9 +86,9 @@ int main()
 
         // Resposta
         read(sockfd, &rtn, 1);
-        if (strlen(rtn) == 0)
+        if (strlen(rtn) == 0){
           printf("Linha vazia!\n");
-        else
+        } else
         {
           printf("%s\n", rtn);
         }
