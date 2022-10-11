@@ -44,19 +44,20 @@ int main() {
 	strcpy(server_address.sun_path, "server_socket");
 	server_len = sizeof(server_address);
 	bind(server_sockfd, (struct sockaddr *)&server_address, server_len);
-	listen(server_sockfd, 5);
+	listen(server_sockfd, MAX_CLIENTS);
 
 	while(1) {		
 		printf("Server waiting...\n");
 		
 		client_len = sizeof(client_address);
 		client_sockfd = accept(server_sockfd,(struct sockaddr *)&client_address, &client_len);
-		read(client_sockfd, &msg, 1);
+		read(client_sockfd, &msg, sizeof(msg));
 		
 		if (msg.cod == 0)
 			add_line(msg.index, msg.line);
 
-		write(client_sockfd, get_line(msg.index), 1);
+		strcpy(rtn, get_line(msg.index));
+		write(client_sockfd, &rtn, sizeof(rtn));
 		close(client_sockfd);
 	}
 }
